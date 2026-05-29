@@ -2,6 +2,10 @@
 
 一個精美、流暢且具備現代視覺美感的個人首頁，能即時顯示當前的日期與動態時間。
 
+## 🔗 線上展示 (Live Demo)
+👉 **[點此進入 Live Demo](https://kevinlin13.github.io/L2-DIC-github/)**
+
+
 ## 🌟 專案特色 (Features)
 - **極致視覺美學 (Premium Aesthetics)**：深邃的靛藍色漸層背景搭配動態漂浮的流體光暈（Ambient Blobs），營造高端科技感。
 - **毛玻璃效果 (Glassmorphism)**：主面板採用半透明磨砂玻璃質感設計，兼具層次與現代感。
