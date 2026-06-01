@@ -1,229 +1,1118 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人首頁 - 林建璋</title>
-    <meta name="description" content="林建璋的個人首頁，展示即時日期與時間。">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --glow-color: rgba(99, 102, 241, 0.15);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-gradient: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
-        }
 
-        * {
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kevin Lin — Data Portfolio</title>
+    <meta name="description"
+        content="Kevin Lin (林建璋) — Aspiring data professional with hands-on projects in data engineering, analytics, and AI applications." />
+    <meta name="keywords"
+        content="Data Engineer, Data Analyst, AI Application Engineer, MLOps, PyTorch, Portfolio, 林建璋, Kevin Lin" />
+    <meta name="author" content="Kevin Lin" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React 18 + Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'Noto Sans TC', 'sans-serif'] },
+                    colors: { paper: '#FAFAFA', ink: '#111111' },
+                    animation: {
+                        'fade-up': 'fadeUp 0.55s ease forwards',
+                        'fade-in': 'fadeIn 0.45s ease forwards',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(16px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #FAFAFA;
+            color: #111111;
+        }
+
+        /* ── Staggered delay helpers ── */
+        .d1 {
+            animation-delay: 0.08s;
+            opacity: 0;
+        }
+
+        .d2 {
+            animation-delay: 0.18s;
+            opacity: 0;
+        }
+
+        .d3 {
+            animation-delay: 0.28s;
+            opacity: 0;
+        }
+
+        .d4 {
+            animation-delay: 0.38s;
+            opacity: 0;
+        }
+
+        .d5 {
+            animation-delay: 0.48s;
+            opacity: 0;
+        }
+
+        .d6 {
+            animation-delay: 0.58s;
+            opacity: 0;
+        }
+
+        /* ── Page transition ── */
+        .page-enter {
+            animation: pageIn 0.35s ease forwards;
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Ghost button ── */
+        .ghost-btn {
+            display: inline-flex;
             align-items: center;
-            overflow: hidden;
-            position: relative;
+            gap: 6px;
+            padding: 7px 16px;
+            border: 1px solid #D1D5DB;
+            border-radius: 5px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #374151;
+            background: transparent;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.2s, background 0.2s, color 0.2s;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
         }
 
-        /* Background animated blobs for a premium look */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-            opacity: 0.5;
-            animation: float 20s infinite alternate;
+        .ghost-btn:hover {
+            border-color: #111;
+            background: #111;
+            color: #fff;
         }
 
-        .blob-1 {
-            width: 400px;
-            height: 400px;
-            background: rgba(99, 102, 241, 0.3);
-            top: -10%;
-            left: -10%;
-            animation-delay: 0s;
+        /* ── Project card ── */
+        .project-card {
+            transition: border-color 0.22s ease, transform 0.22s ease;
         }
 
-        .blob-2 {
-            width: 500px;
-            height: 500px;
-            background: rgba(192, 132, 252, 0.25);
-            bottom: -15%;
-            right: -10%;
-            animation-delay: -5s;
+        .project-card:hover {
+            border-color: #9CA3AF !important;
+            transform: translateY(-2px);
         }
 
-        @keyframes float {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                transform: translate(50px, 30px) scale(1.1);
-            }
+        /* ── Article row ── */
+        .article-row {
+            border-radius: 8px;
+            transition: background 0.18s ease;
+            cursor: pointer;
         }
 
-        .container {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 540px;
+        .article-row:hover {
+            background: #F9FAFB;
         }
 
-        /* Glassmorphism Card */
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 3rem 2rem;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3),
-                        0 0 40px var(--glow-color);
-            text-align: center;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+        /* ── Nav link ── */
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6B7280;
+            text-decoration: none;
+            transition: color 0.2s;
+            letter-spacing: 0.01em;
         }
 
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
-                        0 0 60px rgba(99, 102, 241, 0.25);
-            border-color: rgba(255, 255, 255, 0.15);
+        .nav-link:hover {
+            color: #111;
         }
 
-        .welcome-badge {
+        .nav-link.is-active {
+            color: #111;
+            font-weight: 600;
+        }
+
+        /* ── Tag chip ── */
+        .tag-chip {
             display: inline-block;
-            padding: 0.5rem 1.2rem;
-            border-radius: 100px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.85rem;
+            padding: 3px 10px;
+            background: #F3F4F6;
+            border-radius: 3px;
+            font-size: 0.7rem;
             font-weight: 600;
-            letter-spacing: 0.05em;
-            color: #c084fc;
-            margin-bottom: 2rem;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
+            color: #6B7280;
         }
 
-        .greeting {
-            font-size: 1.5rem;
-            font-weight: 300;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+        /* ── Filter tab ── */
+        .filter-tab {
+            padding: 5px 15px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #E5E7EB;
+            background: #fff;
+            color: #6B7280;
+            transition: all 0.18s;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .name {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 2.5rem;
-            line-height: 1.2;
+        .filter-tab:hover {
+            border-color: #9CA3AF;
+            color: #374151;
         }
 
-        .divider {
+        .filter-tab.is-active {
+            background: #111;
+            border-color: #111;
+            color: #fff;
+        }
+
+        /* ── Search input ── */
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-icon-pos {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            pointer-events: none;
+            display: flex;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #111;
+            background: #fff;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .search-input:focus {
+            border-color: #9CA3AF;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+        }
+
+        /* ── Skill pill ── */
+        .skill-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #374151;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+
+        .skill-pill:hover {
+            border-color: #9CA3AF;
+        }
+
+        /* ── Section rule ── */
+        .rule {
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1) 50%, transparent);
-            margin: 2rem 0;
+            background: #E5E7EB;
         }
 
-        .time-wrapper {
-            margin-top: 1.5rem;
+        /* ── Scrollable tabs ── */
+        .tabs-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 2px;
         }
 
-        .date-display {
-            font-size: 1.1rem;
-            font-weight: 400;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.02em;
+        .tabs-row::-webkit-scrollbar {
+            display: none;
         }
 
-        .time-display {
-            font-size: 2.5rem;
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 0;
+            color: #9CA3AF;
+        }
+
+        .empty-state p:first-child {
+            font-size: 1rem;
             font-weight: 600;
-            font-feature-settings: "tnum";
-            font-variant-numeric: tabular-nums;
-            color: var(--text-primary);
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            margin-bottom: 4px;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 480px) {
-            .card {
-                padding: 2.5rem 1.5rem;
-            }
-            .name {
-                font-size: 2.5rem;
-            }
-            .time-display {
-                font-size: 2rem;
-            }
+        .empty-state p:last-child {
+            font-size: 0.875rem;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F9FAFB;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
         }
     </style>
 </head>
+
 <body>
+    <div id="root"></div>
 
-    <!-- Ambient background animations -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useCallback, useMemo } = React;
 
-    <div class="container">
-        <main class="card">
-            <span class="welcome-badge">Welcome</span>
-            
-            <p class="greeting">Hello, my name is</p>
-            <h1 class="name">林建璋</h1>
-            
-            <div class="divider"></div>
-            
-            <div class="time-wrapper">
-                <div class="date-display" id="date">載入中...</div>
-                <div class="time-display" id="time">00:00:00</div>
-            </div>
-        </main>
-    </div>
+        /* ═══════════════════════════════════════════════
+           DATA
+        ═══════════════════════════════════════════════ */
 
-    <script>
-        function updateDateTime() {
-            const now = new Date();
-            
-            // Format date nicely
-            const options = { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric', 
-                weekday: 'long' 
-            };
-            const formattedDate = now.toLocaleDateString('zh-TW', options);
-            
-            // Format time with 2-digit padding
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const formattedTime = `${hours}:${minutes}:${seconds}`;
-            
-            document.getElementById('date').textContent = formattedDate;
-            document.getElementById('time').textContent = formattedTime;
+        const TARGET_ROLES = [
+            'Data Engineer',
+            'Data Analyst',
+            'AI Application Engineer',
+            'Data Scientist',
+        ];
+
+        const STATS = [
+            { value: '3', label: 'Completed Projects' },
+            { value: '3', label: 'Published Articles' },
+            { value: '3', label: 'Domains Explored' },
+            { value: '3', label: 'Core Skill Areas' },
+        ];
+
+        const PROJECTS = [
+            {
+                id: 'airflow-pipeline',
+                tag: 'Data Engineering',
+                category: 'Data Engineering',
+                title: 'Automated Data Pipeline with Apache Airflow',
+                description:
+                    'Designed and built an end-to-end ETL orchestration system using Apache Airflow. Covered data ingestion from multiple sources, cleaning, schema validation, and transformation — with idempotent DAG design, error alerting, and basic pipeline observability.',
+                highlights: ['DAG Orchestration', 'Schema Validation', 'Automated Retry Logic'],
+                github: 'https://github.com/KevinLin13',
+                notion: 'https://github.com/KevinLin13',
+                featured: true,
+            },
+            {
+                id: 'mlops-pipeline',
+                tag: 'MLOps',
+                category: 'MLOps',
+                title: 'End-to-End MLOps Model Deployment Pipeline',
+                description:
+                    'Built a complete ML lifecycle management system covering experiment tracking with MLflow, automated model evaluation gates, and CI/CD-triggered deployment workflows. Explored containerization with Docker and model serving patterns.',
+                highlights: ['Experiment Tracking (MLflow)', 'CI/CD Integration', 'Model Versioning'],
+                github: 'https://github.com/KevinLin13',
+                notion: 'https://github.com/KevinLin13',
+                featured: true,
+            },
+            {
+                id: 'pytorch-model',
+                tag: 'Deep Learning',
+                category: 'Deep Learning',
+                title: 'PyTorch Time-Series Forecasting with SHAP Analysis',
+                description:
+                    'Developed a multivariate time-series forecasting model in PyTorch with a custom attention mechanism. Applied SHAP (SHapley Additive exPlanations) for post-hoc feature attribution to interpret model decisions and validate feature importance.',
+                highlights: ['Custom Attention Module', 'SHAP Attribution', 'Feature Engineering'],
+                github: 'https://github.com/KevinLin13',
+                notion: 'https://github.com/KevinLin13',
+                featured: true,
+            },
+        ];
+
+        const ALL_ARTICLES = [
+            {
+                id: 'airflow-vs-prefect',
+                date: 'May 2025',
+                tag: 'Data Engineering',
+                category: 'Data Engineering',
+                title: 'Airflow vs. Prefect: Choosing an Orchestrator for Your First Pipeline',
+                desc: 'A practical side-by-side comparison of Apache Airflow and Prefect for pipeline orchestration — covering learning curve, local dev experience, and ecosystem maturity.',
+                url: '#',
+                featured: true,
+            },
+            {
+                id: 'mlflow-intro',
+                date: 'Mar 2025',
+                tag: 'MLOps',
+                category: 'MLOps',
+                title: 'Getting Started with MLflow: Experiment Tracking for Beginners',
+                desc: 'How MLflow fits into the ML development workflow — from logging runs and parameters to comparing model versions and organizing experiments without overhead.',
+                url: '#',
+                featured: true,
+            },
+            {
+                id: 'shap-tabular',
+                date: 'Jan 2025',
+                tag: 'Deep Learning',
+                category: 'Deep Learning',
+                title: 'Understanding Your Model with SHAP: A Practical Guide for Tabular Data',
+                desc: 'Step-by-step walkthrough of applying SHAP values to tabular PyTorch models — global importance plots, local explanations, and common pitfalls to avoid.',
+                url: '#',
+                featured: true,
+            },
+        ];
+
+        const PROJECT_CATS = ['All', 'Data Engineering', 'MLOps', 'Deep Learning'];
+        const ARTICLE_CATS = ['All', 'Data Engineering', 'MLOps', 'Deep Learning', 'Tools & Tips'];
+
+        const SKILLS = {
+            'Data Engineering': ['Apache Airflow', 'dbt', 'PostgreSQL', 'Pandas', 'Polars'],
+            'ML / AI': ['PyTorch', 'scikit-learn', 'MLflow', 'SHAP', 'Optuna'],
+            'Infrastructure': ['Docker', 'GitHub Actions', 'Linux', 'Git'],
+            'Languages': ['Python', 'SQL', 'Bash'],
+        };
+
+        /* ═══════════════════════════════════════════════
+           ROUTER
+        ═══════════════════════════════════════════════ */
+
+        function getPageFromHash() {
+            const h = window.location.hash;
+            if (h.startsWith('#/projects')) return 'projects';
+            if (h.startsWith('#/articles')) return 'articles';
+            return 'home';
         }
 
-        // Initialize and set interval to update every second
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
+        /* ═══════════════════════════════════════════════
+           ICONS
+        ═══════════════════════════════════════════════ */
+
+        const GithubIcon = ({ size = 18 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+            </svg>
+        );
+
+        const LinkedinIcon = ({ size = 18 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+            </svg>
+        );
+
+        const ArrowIcon = () => (
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+            </svg>
+        );
+
+        const ExternalIcon = () => (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+        );
+
+        const SearchIcon = () => (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+        );
+
+        /* ═══════════════════════════════════════════════
+           SHARED COMPONENTS
+        ═══════════════════════════════════════════════ */
+
+        /* ── Navbar ── */
+        function Navbar({ page, onNavigate, onScrollToAbout }) {
+            const [scrolled, setScrolled] = useState(false);
+            const [mobileOpen, setMobileOpen] = useState(false);
+
+            useEffect(() => {
+                const fn = () => setScrolled(window.scrollY > 24);
+                window.addEventListener('scroll', fn, { passive: true });
+                return () => window.removeEventListener('scroll', fn);
+            }, []);
+
+            // Close mobile menu on page change
+            useEffect(() => { setMobileOpen(false); }, [page]);
+
+            const handleAbout = (e) => {
+                e.preventDefault();
+                setMobileOpen(false);
+                onScrollToAbout();
+            };
+
+            const navItems = [
+                { label: 'Projects', page: 'projects', href: '#/projects' },
+                { label: 'Articles', page: 'articles', href: '#/articles' },
+            ];
+
+            const isOpaque = scrolled || page !== 'home';
+
+            return (
+                <header
+                    id="navbar"
+                    className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isOpaque ? 'bg-white/95 backdrop-blur-sm border-b border-slate-100' : 'bg-transparent'
+                        }`}
+                >
+                    <div className="max-w-6xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
+
+                        {/* Logo */}
+                        <a
+                            href="#/"
+                            style={{ textDecoration: 'none' }}
+                            className="flex items-center gap-2 group"
+                        >
+                            <span className="text-sm font-bold tracking-tight text-ink">Kevin Lin</span>
+                            <span className="text-slate-300">|</span>
+                            <span className="text-sm font-medium text-slate-500 group-hover:text-ink transition-colors">Data Portfolio</span>
+                        </a>
+
+                        {/* Desktop Nav */}
+                        <nav className="hidden md:flex items-center gap-7">
+                            {navItems.map(item => (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    className={`nav-link ${page === item.page ? 'is-active' : ''}`}
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                            <a href="#about" className="nav-link" onClick={handleAbout}>About</a>
+                            <div className="w-px h-4 bg-slate-200" />
+                            <a href="https://github.com/KevinLin13" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-ink transition-colors" aria-label="GitHub">
+                                <GithubIcon />
+                            </a>
+                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-ink transition-colors" aria-label="LinkedIn">
+                                <LinkedinIcon />
+                            </a>
+                        </nav>
+
+                        {/* Mobile toggle */}
+                        <button
+                            className="md:hidden p-2 text-slate-500 hover:text-ink transition-colors"
+                            onClick={() => setMobileOpen(v => !v)}
+                            aria-label="Toggle menu"
+                        >
+                            {mobileOpen ? (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                                </svg>
+                            ) : (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
+
+                    {/* Mobile dropdown */}
+                    {mobileOpen && (
+                        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-5 flex flex-col gap-4">
+                            {navItems.map(item => (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    className={`nav-link text-base ${page === item.page ? 'is-active' : ''}`}
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                            <a href="#about" className="nav-link text-base" onClick={handleAbout}>About</a>
+                            <div className="rule mt-1" />
+                            <div className="flex gap-5 pt-1">
+                                <a href="https://github.com/KevinLin13" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-ink transition-colors"><GithubIcon /></a>
+                                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-ink transition-colors"><LinkedinIcon /></a>
+                            </div>
+                        </div>
+                    )}
+                </header>
+            );
+        }
+
+        /* ── Footer ── */
+        function Footer() {
+            const year = new Date().getFullYear();
+            return (
+                <footer className="border-t border-slate-100 bg-paper py-10">
+                    <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div>
+                            <p className="text-sm font-semibold text-ink">Kevin Lin（林建璋）</p>
+                            <p className="text-xs text-slate-400 mt-1">Aspiring Data Professional · Building with data, one project at a time.</p>
+                        </div>
+                        <div className="flex flex-col md:items-end gap-1">
+                            <a href="mailto:kevin@example.com" className="text-sm text-slate-500 hover:text-ink transition-colors" style={{ textDecoration: 'none' }}>
+                                kevin@example.com
+                            </a>
+                            <p className="text-xs text-slate-300">© {year} Kevin Lin. All rights reserved.</p>
+                        </div>
+                    </div>
+                </footer>
+            );
+        }
+
+        /* ── Project Card ── */
+        function ProjectCard({ project, index }) {
+            return (
+                <article
+                    className="project-card border border-slate-100 rounded-xl bg-white p-7 flex flex-col gap-5 animate-fade-up"
+                    style={{ animationDelay: `${0.05 + index * 0.12}s`, opacity: 0 }}
+                >
+                    <span className="tag-chip self-start">{project.tag}</span>
+                    <div>
+                        <h3 className="text-base font-bold text-ink leading-snug mb-2.5">{project.title}</h3>
+                        <p className="text-sm text-slate-500 leading-relaxed font-light">{project.description}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {project.highlights.map(h => (
+                            <span key={h} className="text-xs font-mono text-slate-600 bg-slate-50 border border-slate-100 rounded px-2 py-1">{h}</span>
+                        ))}
+                    </div>
+                    <div className="rule" />
+                    <div className="flex gap-3 flex-wrap">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="ghost-btn">
+                            Source Code <ArrowIcon />
+                        </a>
+                        <a href={project.notion} target="_blank" rel="noopener noreferrer" className="ghost-btn">
+                            Architecture Digest <ExternalIcon />
+                        </a>
+                    </div>
+                </article>
+            );
+        }
+
+        /* ── Article Row ── */
+        function ArticleRow({ article, index }) {
+            return (
+                <a
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', display: 'block' }}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${0.05 + index * 0.1}s`, opacity: 0 }}
+                >
+                    <article className="article-row py-5 px-3 -mx-3 flex flex-col md:flex-row md:items-start md:gap-10 group">
+                        <div className="text-xs font-mono text-slate-400 mb-1.5 md:mb-0 md:w-24 flex-shrink-0 pt-0.5">{article.date}</div>
+                        <div className="flex-1">
+                            <span className="tag-chip mb-2 inline-block">{article.tag}</span>
+                            <h3 className="text-sm font-bold text-ink group-hover:text-slate-500 transition-colors mb-1">{article.title}</h3>
+                            <p className="text-sm text-slate-500 font-light leading-relaxed">{article.desc}</p>
+                        </div>
+                        <div className="text-slate-300 group-hover:text-slate-500 transition-colors mt-2 md:mt-1 flex-shrink-0">
+                            <ArrowIcon />
+                        </div>
+                    </article>
+                </a>
+            );
+        }
+
+        /* ── Search Bar ── */
+        function SearchBar({ value, onChange, placeholder }) {
+            return (
+                <div className="search-wrap">
+                    <span className="search-icon-pos"><SearchIcon /></span>
+                    <input
+                        type="search"
+                        className="search-input"
+                        placeholder={placeholder}
+                        value={value}
+                        onChange={e => onChange(e.target.value)}
+                    />
+                </div>
+            );
+        }
+
+        /* ── Filter Tabs ── */
+        function FilterTabs({ categories, active, onChange }) {
+            return (
+                <div className="tabs-row">
+                    {categories.map(cat => (
+                        <button
+                            key={cat}
+                            className={`filter-tab ${active === cat ? 'is-active' : ''}`}
+                            onClick={() => onChange(cat)}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            );
+        }
+
+        /* ─────────────── SECTION HEADER ─────────────── */
+        function SectionHeader({ eyebrow, title, action }) {
+            return (
+                <div className="flex items-end justify-between mb-8">
+                    <div>
+                        <span className="tag-chip mb-2 inline-block">{eyebrow}</span>
+                        <h2 className="text-xl md:text-2xl font-extrabold text-ink tracking-tight">{title}</h2>
+                    </div>
+                    {action}
+                </div>
+            );
+        }
+
+        /* ═══════════════════════════════════════════════
+           HOME PAGE
+        ═══════════════════════════════════════════════ */
+
+        function Hero({ onNavigate }) {
+            return (
+                <section className="max-w-6xl mx-auto px-6 md:px-10 pt-32 pb-16 md:pt-40 md:pb-22">
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-12">
+
+                        {/* Left copy */}
+                        <div className="flex-1 max-w-2xl">
+                            <div className="animate-fade-up d1">
+                                <span className="tag-chip mb-5 inline-block">Open to Opportunities</span>
+                            </div>
+
+                            <h1 className="text-4xl md:text-5xl lg:text-[3.1rem] font-extrabold leading-tight tracking-tight text-ink mb-6 animate-fade-up d2">
+                                Turning raw data into decisions — through analysis, pipelines, and applied ML.
+                            </h1>
+
+                            <p className="text-base md:text-lg text-slate-500 leading-relaxed mb-8 font-light animate-fade-up d3">
+                                I'm <strong className="font-semibold text-slate-700">Kevin Lin（林建璋）</strong> — a data enthusiast building hands-on experience across data engineering, analytics, and AI applications. Every project here reflects a genuine end-to-end implementation, not a tutorial exercise.
+                            </p>
+
+                            <div className="flex flex-wrap gap-3 animate-fade-up d4">
+                                <a href="#/projects" className="ghost-btn" onClick={(e) => { e.preventDefault(); onNavigate('projects'); }}>
+                                    View Projects <ArrowIcon />
+                                </a>
+                                <a href="mailto:kevin@example.com" className="ghost-btn">Get in Touch</a>
+                            </div>
+                        </div>
+
+                        {/* Right: Roles card */}
+                        <div className="md:w-52 lg:w-58 flex-shrink-0 animate-fade-in d5">
+                            <div className="border border-slate-100 rounded-2xl bg-white p-6 shadow-none">
+                                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">Open to roles in</p>
+                                <div className="flex flex-col gap-3">
+                                    {TARGET_ROLES.map((role) => (
+                                        <div key={role} className="flex items-center gap-3">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
+                                            <span className="text-sm font-medium text-slate-700">{role}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="mt-5 pt-4 border-t border-slate-100">
+                                    <p className="text-xs text-slate-400 leading-relaxed">Full-time · Internship · Contract</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Stats bar */}
+                    <div className="mt-14 pt-8 border-t border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-8 animate-fade-up d6">
+                        {STATS.map(s => (
+                            <div key={s.label}>
+                                <p className="text-2xl md:text-3xl font-extrabold text-ink mb-1">{s.value}</p>
+                                <p className="text-xs text-slate-400 font-medium tracking-wide uppercase leading-relaxed">{s.label}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+
+        function FeaturedProjects({ onNavigate }) {
+            const featured = useMemo(() => PROJECTS.filter(p => p.featured), []);
+            return (
+                <section className="max-w-6xl mx-auto px-6 md:px-10 py-16">
+                    <SectionHeader
+                        eyebrow="Featured Work"
+                        title="Selected Projects"
+                        action={
+                            <a
+                                href="#/projects"
+                                style={{ textDecoration: 'none' }}
+                                className="text-sm font-medium text-slate-400 hover:text-ink transition-colors hidden md:flex items-center gap-1.5"
+                                onClick={(e) => { e.preventDefault(); onNavigate('projects'); }}
+                            >
+                                All projects <ArrowIcon />
+                            </a>
+                        }
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {featured.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
+                    </div>
+                    <div className="mt-6 md:hidden">
+                        <a
+                            href="#/projects"
+                            style={{ textDecoration: 'none' }}
+                            className="text-sm font-medium text-slate-400 hover:text-ink transition-colors flex items-center gap-1.5"
+                            onClick={(e) => { e.preventDefault(); onNavigate('projects'); }}
+                        >
+                            All projects <ArrowIcon />
+                        </a>
+                    </div>
+                </section>
+            );
+        }
+
+        function LatestArticles({ onNavigate }) {
+            const featured = useMemo(() => ALL_ARTICLES.filter(a => a.featured), []);
+            return (
+                <section className="border-t border-slate-100 bg-white">
+                    <div className="max-w-6xl mx-auto px-6 md:px-10 py-16">
+                        <SectionHeader
+                            eyebrow="Writing"
+                            title="Latest Articles"
+                            action={
+                                <a
+                                    href="#/articles"
+                                    style={{ textDecoration: 'none' }}
+                                    className="text-sm font-medium text-slate-400 hover:text-ink transition-colors hidden md:flex items-center gap-1.5"
+                                    onClick={(e) => { e.preventDefault(); onNavigate('articles'); }}
+                                >
+                                    All articles <ArrowIcon />
+                                </a>
+                            }
+                        />
+                        <div className="flex flex-col divide-y divide-slate-100">
+                            {featured.map((a, i) => <ArticleRow key={a.id} article={a} index={i} />)}
+                        </div>
+                        <div className="mt-6 md:hidden">
+                            <a
+                                href="#/articles"
+                                style={{ textDecoration: 'none' }}
+                                className="text-sm font-medium text-slate-400 hover:text-ink transition-colors flex items-center gap-1.5"
+                                onClick={(e) => { e.preventDefault(); onNavigate('articles'); }}
+                            >
+                                All articles <ArrowIcon />
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        function SkillsSection() {
+            return (
+                <section className="border-t border-slate-100 py-16">
+                    <div className="max-w-6xl mx-auto px-6 md:px-10">
+                        <div className="mb-8">
+                            <span className="tag-chip mb-2 inline-block">Stack</span>
+                            <h2 className="text-xl md:text-2xl font-extrabold text-ink tracking-tight">Technical Toolkit</h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {Object.entries(SKILLS).map(([cat, items]) => (
+                                <div key={cat}>
+                                    <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3">{cat}</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {items.map(s => <span key={s} className="skill-pill">{s}</span>)}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        function AboutSection() {
+            return (
+                <section id="about" className="border-t border-slate-100 bg-white py-16">
+                    <div className="max-w-6xl mx-auto px-6 md:px-10">
+                        <div className="max-w-3xl">
+                            <span className="tag-chip mb-3 inline-block">Background</span>
+                            <h2 className="text-xl md:text-2xl font-extrabold text-ink tracking-tight mb-6">About Me</h2>
+                            <div className="space-y-4 text-base text-slate-500 leading-relaxed font-light">
+                                <p>
+                                    I'm <strong className="font-semibold text-slate-700">Kevin Lin（林建璋）</strong>, currently building a path toward a career in the data industry. My interest spans data engineering, analytics, and applied AI — areas I explore through self-directed, end-to-end projects.
+                                </p>
+                                <p>
+                                    Each project in this portfolio reflects genuine implementation effort: real architectural decisions, real debugging, and real documentation. I believe the best way to learn data systems is to build them — then explain what you built and why.
+                                </p>
+                                <p>
+                                    I'm actively seeking opportunities as a <strong className="font-medium text-slate-700">Data Engineer, Data Analyst, or AI Application Engineer</strong> where I can contribute practically and grow alongside an experienced team.
+                                </p>
+                            </div>
+                            <div className="mt-8 flex flex-wrap gap-3">
+                                <a href="https://github.com/KevinLin13" target="_blank" rel="noopener noreferrer" className="ghost-btn">
+                                    <GithubIcon size={15} /> GitHub
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="ghost-btn">
+                                    <LinkedinIcon size={15} /> LinkedIn
+                                </a>
+                                <a href="mailto:kevin@example.com" className="ghost-btn">Email Me</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        function HomePage({ onNavigate }) {
+            return (
+                <>
+                    <Hero onNavigate={onNavigate} />
+                    <div className="rule" />
+                    <FeaturedProjects onNavigate={onNavigate} />
+                    <LatestArticles onNavigate={onNavigate} />
+                    <SkillsSection />
+                    <AboutSection />
+                </>
+            );
+        }
+
+        /* ═══════════════════════════════════════════════
+           PROJECTS PAGE  (#/projects)
+        ═══════════════════════════════════════════════ */
+
+        function ProjectsPage() {
+            const [query, setQuery] = useState('');
+            const [activeCat, setActiveCat] = useState('All');
+
+            const filtered = useMemo(() => {
+                const q = query.toLowerCase().trim();
+                return PROJECTS.filter(p => {
+                    const matchCat = activeCat === 'All' || p.category === activeCat;
+                    const haystack = (p.title + ' ' + p.description + ' ' + p.tag + ' ' + p.highlights.join(' ')).toLowerCase();
+                    const matchQ = !q || haystack.includes(q);
+                    return matchCat && matchQ;
+                });
+            }, [query, activeCat]);
+
+            return (
+                <div className="page-enter">
+                    <div className="max-w-6xl mx-auto px-6 md:px-10 pt-28 md:pt-32 pb-20">
+
+                        {/* Page header */}
+                        <div className="mb-10 animate-fade-up d1">
+                            <span className="tag-chip mb-3 inline-block">Portfolio</span>
+                            <h1 className="text-3xl md:text-4xl font-extrabold text-ink tracking-tight mb-2">All Projects</h1>
+                            <p className="text-sm text-slate-500 font-light">End-to-end implementations across data engineering, MLOps, and AI.</p>
+                        </div>
+
+                        {/* Controls */}
+                        <div className="flex flex-col gap-4 mb-6 animate-fade-up d2">
+                            <SearchBar
+                                value={query}
+                                onChange={setQuery}
+                                placeholder="Search by title, tool, or keyword…"
+                            />
+                            <FilterTabs
+                                categories={PROJECT_CATS}
+                                active={activeCat}
+                                onChange={setActiveCat}
+                            />
+                        </div>
+
+                        {/* Result count */}
+                        <p className="text-xs text-slate-400 mb-6 font-medium">
+                            {filtered.length} {filtered.length === 1 ? 'project' : 'projects'}
+                            {activeCat !== 'All' ? ` in ${activeCat}` : ''}
+                            {query ? ` matching "${query}"` : ''}
+                        </p>
+
+                        {/* Grid */}
+                        {filtered.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                {filtered.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
+                            </div>
+                        ) : (
+                            <div className="empty-state">
+                                <p>No projects found</p>
+                                <p>Try a different keyword or select another category.</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        /* ═══════════════════════════════════════════════
+           ARTICLES PAGE  (#/articles)
+        ═══════════════════════════════════════════════ */
+
+        function ArticlesPage() {
+            const [query, setQuery] = useState('');
+            const [activeCat, setActiveCat] = useState('All');
+
+            const filtered = useMemo(() => {
+                const q = query.toLowerCase().trim();
+                return ALL_ARTICLES.filter(a => {
+                    const matchCat = activeCat === 'All' || a.category === activeCat;
+                    const haystack = (a.title + ' ' + a.desc + ' ' + a.tag).toLowerCase();
+                    const matchQ = !q || haystack.includes(q);
+                    return matchCat && matchQ;
+                });
+            }, [query, activeCat]);
+
+            return (
+                <div className="page-enter">
+                    <div className="max-w-6xl mx-auto px-6 md:px-10 pt-28 md:pt-32 pb-20">
+
+                        {/* Page header */}
+                        <div className="mb-10 animate-fade-up d1">
+                            <span className="tag-chip mb-3 inline-block">Writing</span>
+                            <h1 className="text-3xl md:text-4xl font-extrabold text-ink tracking-tight mb-2">All Articles</h1>
+                            <p className="text-sm text-slate-500 font-light">Notes and writeups on data systems, tools, and concepts I've explored firsthand.</p>
+                        </div>
+
+                        {/* Controls */}
+                        <div className="flex flex-col gap-4 mb-6 animate-fade-up d2">
+                            <SearchBar
+                                value={query}
+                                onChange={setQuery}
+                                placeholder="Search by title, topic, or keyword…"
+                            />
+                            <FilterTabs
+                                categories={ARTICLE_CATS}
+                                active={activeCat}
+                                onChange={setActiveCat}
+                            />
+                        </div>
+
+                        {/* Result count */}
+                        <p className="text-xs text-slate-400 mb-2 font-medium">
+                            {filtered.length} {filtered.length === 1 ? 'article' : 'articles'}
+                            {activeCat !== 'All' ? ` in ${activeCat}` : ''}
+                            {query ? ` matching "${query}"` : ''}
+                        </p>
+
+                        {/* List */}
+                        {filtered.length > 0 ? (
+                            <div className="flex flex-col divide-y divide-slate-100">
+                                {filtered.map((a, i) => <ArticleRow key={a.id} article={a} index={i} />)}
+                            </div>
+                        ) : (
+                            <div className="empty-state" style={{ marginTop: '3rem' }}>
+                                <p>No articles found</p>
+                                <p>Try a different keyword or select another category.</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        /* ═══════════════════════════════════════════════
+           APP  (Router)
+        ═══════════════════════════════════════════════ */
+
+        function App() {
+            const [page, setPage] = useState(getPageFromHash);
+
+            useEffect(() => {
+                const handler = () => {
+                    const next = getPageFromHash();
+                    setPage(prev => {
+                        if (prev !== next) window.scrollTo({ top: 0, behavior: 'instant' });
+                        return next;
+                    });
+                };
+                window.addEventListener('hashchange', handler);
+                return () => window.removeEventListener('hashchange', handler);
+            }, []);
+
+            const navigate = useCallback((target) => {
+                const hash = target === 'home' ? '#/' : `#/${target}`;
+                if (window.location.hash !== hash) {
+                    window.location.hash = hash;
+                } else if (target === 'home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }, []);
+
+            const scrollToAbout = useCallback(() => {
+                if (page !== 'home') {
+                    window.location.hash = '#/';
+                    setTimeout(() => {
+                        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                    }, 360);
+                } else {
+                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, [page]);
+
+            return (
+                <div className="min-h-screen bg-paper">
+                    <Navbar page={page} onNavigate={navigate} onScrollToAbout={scrollToAbout} />
+                    <main>
+                        {page === 'home' && <HomePage onNavigate={navigate} />}
+                        {page === 'projects' && <ProjectsPage />}
+                        {page === 'articles' && <ArticlesPage />}
+                    </main>
+                    <Footer />
+                </div>
+            );
+        }
+
+        /* Mount */
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
+
 </html>
